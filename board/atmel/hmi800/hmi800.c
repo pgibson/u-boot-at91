@@ -153,19 +153,18 @@ static void at91sam9m10g45ek_macb_hw_init(void)
 #ifdef CONFIG_LCD
 
 vidinfo_t panel_info = {
-	vl_col:		480,
-	vl_row:		272,
-	vl_clk:		9000000,
-	vl_sync:	ATMEL_LCDC_INVLINE_NORMAL |
-			ATMEL_LCDC_INVFRAME_NORMAL,
+	vl_col:		800,
+	vl_row:		480,
+	vl_clk:		10000,
+	vl_sync:	0,
 	vl_bpix:	3,
 	vl_tft:		1,
-	vl_hsync_len:	45,
-	vl_left_margin:	1,
-	vl_right_margin:1,
-	vl_vsync_len:	1,
-	vl_upper_margin:40,
-	vl_lower_margin:1,
+	vl_hsync_len:	10,
+	vl_left_margin:	89,
+	vl_right_margin:164,
+	vl_vsync_len:	10,
+	vl_upper_margin:23,
+	vl_lower_margin:10,
 	mmio :		 ATMEL_BASE_LCDC,
 };
 

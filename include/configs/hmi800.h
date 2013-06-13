@@ -50,6 +50,31 @@
 #define CONFIG_CMD_BOOTZ
 #define CONFIG_OF_LIBFDT
 
+/* Partitions */
+#define MT_FLASH_BOOTSTRAP                0x00000000
+#define MT_FLASH_BOOTSTRAP_END            0x0003FFFF
+#define MT_FLASH_BOOTSTRAP_SIZE           0x00040000
+#define MT_FLASH_UBOOT                    0x00040000
+#define MT_FLASH_UBOOT_END                0x0009FFFF
+#define MT_FLASH_UBOOT_SIZE               0x00060000
+#define MT_FLASH_ENV                      0x000A0000
+#define MT_FLASH_ENV_END                  0x000BFFFF
+#define MT_FLASH_ENV_SIZE                 0x00020000
+#define MT_FLASH_KERNEL                   0x000C0000
+#define MT_FLASH_KERNEL_END               0x003BFFFF
+#define MT_FLASH_KERNEL_SIZE              0x00300000
+#define MT_FLASH_CONFIG                   0x003C0000
+#define MT_FLASH_CONFIG_END               0x004BFFFF
+#define MT_FLASH_CONFIG_SIZE              0x00100000
+#define MT_FLASH_SOFTWARE                 0x004C0000
+#define MT_FLASH_SOFTWARE_END             0x0FFFFFFF
+#define MT_FLASH_SOFTWARE_SIZE            0x0FB40000
+
+#define MT_RAM_KERNEL             0x70000000
+#define MT_RAM_UBOOT              0x70000000
+#define MT_RAM_ROOTFS             0x70000000
+#define MT_RAM_SOFTWARE           0x70000000
+
 /* general purpose I/O */
 #define CONFIG_ATMEL_LEGACY		/* required until (g)pio is fixed */
 #define CONFIG_AT91_GPIO
@@ -151,19 +176,43 @@
 
 /* bootstrap + u-boot + env in nandflash */
 #define CONFIG_ENV_IS_IN_NAND
-#define CONFIG_ENV_OFFSET		0xc0000
-#define CONFIG_ENV_OFFSET_REDUND	0x100000
+#define CONFIG_ENV_OFFSET		MT_FLASH_ENV
+/* #define CONFIG_ENV_OFFSET_REDUND	0x100000 */
 #define CONFIG_ENV_SIZE			0x20000
 
-#define CONFIG_BOOTCOMMAND						\
-	"nand read 0x70000000 0x200000 0x300000;"			\
-	"bootm 0x70000000"
-#define CONFIG_BOOTARGS							\
-	"console=ttyS0,115200 earlyprintk "				\
-	"mtdparts=atmel_nand:256k(bootstrap)ro,512k(uboot)ro,"		\
-	"256k(env),256k(env_redundant),256k(spare),"			\
-	"512k(dtb),6M(kernel)ro,-(rootfs) "				\
-	"root=/dev/mtdblock7 rw rootfstype=jffs2"
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
+#define CONFIG_BOOTCOMMAND								\
+	"run nand_boot"
+#define CONFIG_EXTRA_ENV_SETTINGS					\
+	"console=ttyS0,115200\0"					\
+	"mtdparts=atmel_nand:256k(bootstrap)ro,384k(uboot)ro,128k(env),3M(kernel)ro,-(rootfs)\0"	\
+	"root=/dev/mtdblock4 rw rootfstype=jffs2\0" 			\
+	"destenv=nand erase " TOSTRING(MT_FLASH_ENV) " " TOSTRING(MT_FLASH_ENV_SIZE) "\0"	\
+	"destconf=nand erase " TOSTRING(MT_CONFIG_ENV) " " TOSTRING(MT_FLASH_CONFIG_SIZE) "\0"	\
+	"serverip=192.168.1.117\0"					\
+	"ipaddr=192.168.1.121\0"					\
+	"ethaddr=aa:bb:45:32:65:7f\0"					\
+	"tftpdir=/tftpboot/mt\0"					\
+	"bootfile=uImage\0"					\
+	"rootpath=${tftpdir}/rootfs\0"					\
+	"update_uboot=tftp " TOSTRING(MT_RAM_UBOOT) " ${tftpdir}/u-boot.bin; nand erase " 	\
+	  TOSTRING(MT_FLASH_UBOOT) " " TOSTRING(MT_FLASH_UBOOT_SIZE) "; nand write " 		\
+	  TOSTRING(MT_RAM_UBOOT) " " TOSTRING(MT_FLASH_UBOOT) " " TOSTRING(MT_FLASH_UBOOT_SIZE)	"\0"	\
+        "update_kernel=tftp " TOSTRING(MT_RAM_KERNEL) " ${tftpdir}/${bootfile}; nand erase "	\
+          TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) "; nand write "	\
+          TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) "\0"	\
+        "update_software=tftp " TOSTRING(MT_RAM_SOFTWARE) " ${tftpdir}/rootfs.jffs2; nand erase "	\
+          TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "; nand write "		\
+          TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "\0"	\
+	"net_boot=run netargs; tftp " TOSTRING(MT_RAM_KERNEL) " ${bootfile}; bootm " TOSTRING(MT_RAM_KERNEL) "\0"	\
+	"netargs=sete bootargs console=${console} root=/dev/nfs nfsroot=${serverip}:${rootpath} rw "	\
+	  "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}::off\0"	\
+	"nand_boot=run nandargs; nand read " TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) ";"     \
+	  "bootm " TOSTRING(MT_RAM_KERNEL) "\0"		\
+	"nandargs=sete bootargs console=${console} mtdparts=${mtdparts} root=${root}\0"
+
 
 #define CONFIG_BAUDRATE			115200
 
