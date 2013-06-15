@@ -196,7 +196,7 @@
 	"ethaddr=aa:bb:45:32:65:7f\0"					\
 	"tftpdir=/tftpboot/mt\0"					\
 	"bootfile=uImage\0"					\
-	"rootpath=${tftpdir}/rootfs\0"					\
+	"rootpath=/tftpboot/mt/rootfs\0"					\
 	"update_uboot=tftp " TOSTRING(MT_RAM_UBOOT) " ${tftpdir}/u-boot.bin; nand erase " 	\
 	  TOSTRING(MT_FLASH_UBOOT) " " TOSTRING(MT_FLASH_UBOOT_SIZE) "; nand write " 		\
 	  TOSTRING(MT_RAM_UBOOT) " " TOSTRING(MT_FLASH_UBOOT) " " TOSTRING(MT_FLASH_UBOOT_SIZE)	"\0"	\
@@ -206,7 +206,7 @@
         "update_software=tftp " TOSTRING(MT_RAM_SOFTWARE) " ${tftpdir}/rootfs.jffs2; nand erase "	\
           TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "; nand write "		\
           TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "\0"	\
-	"net_boot=run netargs; tftp " TOSTRING(MT_RAM_KERNEL) " ${bootfile}; bootm " TOSTRING(MT_RAM_KERNEL) "\0"	\
+	"net_boot=run netargs; tftp " TOSTRING(MT_RAM_KERNEL) " ${tftpdir}/${bootfile}; bootm " TOSTRING(MT_RAM_KERNEL) "\0"	\
 	"netargs=sete bootargs console=${console} root=/dev/nfs nfsroot=${serverip}:${rootpath} rw "	\
 	  "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}::off\0"	\
 	"nand_boot=run nandargs; nand read " TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) ";"     \
