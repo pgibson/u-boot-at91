@@ -204,11 +204,11 @@
           TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) "; nand write "	\
           TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) "\0"	\
         "update_software=tftp " TOSTRING(MT_RAM_SOFTWARE) " ${tftpdir}/rootfs.jffs2; nand erase "	\
-          TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "; nand write "		\
-          TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "\0"	\
+          TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "; nand write.jffs2 "		\
+          TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) "${filesize}\0"	\
 	"net_boot=run netargs; tftp " TOSTRING(MT_RAM_KERNEL) " ${tftpdir}/${bootfile}; bootm " TOSTRING(MT_RAM_KERNEL) "\0"	\
-	"netargs=sete bootargs console=${console} root=/dev/nfs nfsroot=${serverip}:${rootpath} rw "	\
-	  "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}::off\0"	\
+	"netargs=sete bootargs console=${console} root=/dev/nfs rw nfsroot=${serverip}:${rootpath},tcp "	\
+	  "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}::eth0:off\0"	\
 	"nand_boot=run nandargs; nand read " TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) ";"     \
 	  "bootm " TOSTRING(MT_RAM_KERNEL) "\0"		\
 	"nandargs=sete bootargs console=${console} mtdparts=${mtdparts} root=${root}\0"
