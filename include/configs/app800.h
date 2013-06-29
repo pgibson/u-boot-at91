@@ -160,6 +160,7 @@
 #define CONFIG_RMII
 #define CONFIG_NET_RETRY_COUNT		20
 #define CONFIG_RESET_PHY_R
+#define CONFIG_NET_RETRY_COUNT		100
 
 /* USB */
 #define CONFIG_USB_EHCI
@@ -205,7 +206,7 @@
           TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) "\0"	\
         "update_software=tftp " TOSTRING(MT_RAM_SOFTWARE) " ${tftpdir}/rootfs.jffs2; nand erase "	\
           TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "; nand write.jffs2 "		\
-          TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) "${filesize}\0"	\
+          TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) " ${filesize}\0"	\
 	"net_boot=run netargs; tftp " TOSTRING(MT_RAM_KERNEL) " ${tftpdir}/${bootfile}; bootm " TOSTRING(MT_RAM_KERNEL) "\0"	\
 	"netargs=sete bootargs console=${console} root=/dev/nfs rw nfsroot=${serverip}:${rootpath},tcp "	\
 	  "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}::eth0:off\0"	\
