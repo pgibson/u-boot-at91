@@ -290,6 +290,7 @@ int board_init(void)
 
 int dram_init(void)
 {
+printk("hello\n");
 	gd->ram_size = get_ram_size((void *) CONFIG_SYS_SDRAM_BASE,
 				    CONFIG_SYS_SDRAM_SIZE);
 	return 0;

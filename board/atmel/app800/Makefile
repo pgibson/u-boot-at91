@@ -29,7 +29,7 @@ include $(TOPDIR)/config.mk
 
 LIB	= $(obj)lib$(BOARD).o
 
-COBJS-y += hmi800.o
+COBJS-y += app800.o
 COBJS-y += led.o
 
 SRCS	:= $(SOBJS:.o=.S) $(COBJS-y:.o=.c)
