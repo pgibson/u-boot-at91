@@ -225,26 +225,7 @@ static void at91sam9m10g45ek_lcd_hw_init(void)
 
 void lcd_show_board_info(void)
 {
-	ulong dram_size, nand_size;
-	int i;
-	char temp[32];
-
-	lcd_printf ("%s\n", U_BOOT_VERSION);
-	lcd_printf ("(C) 2008 ATMEL Corp\n");
-	lcd_printf ("at91support@atmel.com\n");
-	lcd_printf ("%s CPU at %s MHz\n",
-		ATMEL_CPU_NAME,
-		strmhz(temp, get_cpu_clk_rate()));
-
-	dram_size = 0;
-	for (i = 0; i < CONFIG_NR_DRAM_BANKS; i++)
-		dram_size += gd->bd->bi_dram[i].size;
-	nand_size = 0;
-	for (i = 0; i < CONFIG_SYS_MAX_NAND_DEVICE; i++)
-		nand_size += nand_info[i].size;
-	lcd_printf ("  %ld MB SDRAM, %ld MB NAND\n",
-		dram_size >> 20,
-		nand_size >> 20 );
+	lcd_puts_xy (332, 236, "Loading System...");
 }
 #endif /* CONFIG_LCD_INFO */
 #endif
@@ -258,7 +239,7 @@ int board_early_init_f(void)
 int board_init(void)
 {
 	/* arch number of AT91SAM9M10G45EK-Board */
-#ifdef CONFIG_HMI800
+#ifdef CONFIG_APP800
 	gd->bd->bi_arch_number = MACH_TYPE_AT91SAM9M10G45EK;
 #elif defined CONFIG_AT91SAM9G45EKES
 	gd->bd->bi_arch_number = MACH_TYPE_AT91SAM9G45EKES;
@@ -290,7 +271,6 @@ int board_init(void)
 
 int dram_init(void)
 {
-printk("hello\n");
 	gd->ram_size = get_ram_size((void *) CONFIG_SYS_SDRAM_BASE,
 				    CONFIG_SYS_SDRAM_SIZE);
 	return 0;

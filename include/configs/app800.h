@@ -37,7 +37,7 @@
 #define CONFIG_SYS_AT91_MAIN_CLOCK      12000000 /* from 12 MHz crystal */
 #define CONFIG_SYS_HZ		        1000
 
-#define CONFIG_HMI800
+#define CONFIG_APP800
 #define CONFIG_AT91FAMILY
 
 #define CONFIG_CMDLINE_TAG		/* enable passing of ATAGs	*/
@@ -88,10 +88,10 @@
 /* LCD */
 #define CONFIG_LCD
 #define LCD_BPP				LCD_COLOR8
-#define CONFIG_LCD_LOGO
-#undef LCD_TEST_PATTERN
+/*#define CONFIG_LCD_LOGO*/
+/*#define LCD_TEST_PATTERN*/
 #define CONFIG_LCD_INFO
-#define CONFIG_LCD_INFO_BELOW_LOGO
+/*#define CONFIG_LCD_INFO_BELOW_LOGO*/
 #define CONFIG_SYS_WHITE_ON_BLACK
 #define CONFIG_ATMEL_LCD
 #define CONFIG_ATMEL_LCD_RGB565
@@ -103,8 +103,8 @@
 #define CONFIG_AT91_LED
 #define	CONFIG_RED_LED		AT91_PIN_PD31	/* this is the user1 led */
 #define	CONFIG_GREEN_LED	AT91_PIN_PD0	/* this is the user2 led */
-
-#define CONFIG_BOOTDELAY	3
+#define CONFIG_BOOTDELAY	1
+#define CONFIG_ZERO_BOOTDELAY_CHECK
 
 /*
  * BOOTP options
@@ -191,7 +191,7 @@
 	"mtdparts=atmel_nand:256k(bootstrap)ro,384k(uboot)ro,128k(env),3M(kernel)ro,-(rootfs)\0"	\
 	"root=/dev/mtdblock4 rw rootfstype=jffs2\0" 			\
 	"destenv=nand erase " TOSTRING(MT_FLASH_ENV) " " TOSTRING(MT_FLASH_ENV_SIZE) "\0"	\
-	"destconf=nand erase " TOSTRING(MT_CONFIG_ENV) " " TOSTRING(MT_FLASH_CONFIG_SIZE) "\0"	\
+	"destconf=nand erase " TOSTRING(MT_FLASH_CONFIG) " " TOSTRING(MT_FLASH_CONFIG_SIZE) "\0"	\
 	"serverip=192.168.1.117\0"					\
 	"ipaddr=192.168.1.121\0"					\
 	"ethaddr=aa:bb:45:32:65:7f\0"					\
