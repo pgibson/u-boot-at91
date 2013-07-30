@@ -188,8 +188,8 @@
 	"run nand_boot"
 #define CONFIG_EXTRA_ENV_SETTINGS					\
 	"console=ttyS0,115200\0"					\
-	"mtdparts=atmel_nand:256k(bootstrap)ro,384k(uboot)ro,128k(env),3M(kernel)ro,-(rootfs)\0"	\
-	"root=/dev/mtdblock4 rw rootfstype=jffs2\0" 			\
+	"mtdparts=atmel_nand:256k(bootstrap)ro,384k(uboot)ro,128k(env),3M(kernel)ro,1M(config),-(rootfs)\0"	\
+	"root=/dev/mtdblock5 rw rootfstype=jffs2\0" 			\
 	"destenv=nand erase " TOSTRING(MT_FLASH_ENV) " " TOSTRING(MT_FLASH_ENV_SIZE) "\0"	\
 	"destconf=nand erase " TOSTRING(MT_FLASH_CONFIG) " " TOSTRING(MT_FLASH_CONFIG_SIZE) "\0"	\
 	"serverip=192.168.1.117\0"					\
