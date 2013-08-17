@@ -271,8 +271,20 @@ int board_init(void)
 
 int dram_init(void)
 {
-	gd->ram_size = get_ram_size((void *) CONFIG_SYS_SDRAM_BASE,
+	/* For the first DRAM bank */
+	gd->bd->bi_dram[0].start = CONFIG_SYS_SDRAM1_BASE;
+ 	gd->bd->bi_dram[0].size = CONFIG_SYS_SDRAM1_SIZE;
+	/* For the second DRAM bank */
+	gd->bd->bi_dram[1].start = CONFIG_SYS_SDRAM_BASE;
+	gd->bd->bi_dram[1].size = CONFIG_SYS_SDRAM_SIZE;
+
+	gd->ram_size = CONFIG_SYS_SDRAM1_SIZE+CONFIG_SYS_SDRAM_SIZE;
+
+/*get_ram_size((void *) CONFIG_SYS_SDRAM1_BASE,
+				    CONFIG_SYS_SDRAM1_SIZE);
+	gd->ram_size += get_ram_size((void *) CONFIG_SYS_SDRAM_BASE,
 				    CONFIG_SYS_SDRAM_SIZE);
+*/
 	return 0;
 }
 
