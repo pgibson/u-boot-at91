@@ -40,8 +40,8 @@
 #define CONFIG_APP800
 #define CONFIG_AT91FAMILY
 
-#define CONFIG_CMDLINE_TAG		/* enable passing of ATAGs	*/
-#define CONFIG_SETUP_MEMORY_TAGS
+//#define CONFIG_CMDLINE_TAG		/* enable passing of ATAGs	*/
+//#define CONFIG_SETUP_MEMORY_TAGS
 #define CONFIG_INITRD_TAG
 #define CONFIG_SKIP_LOWLEVEL_INIT
 #define CONFIG_BOARD_EARLY_INIT_F
@@ -190,6 +190,7 @@
 	"run nand_boot"
 #define CONFIG_EXTRA_ENV_SETTINGS					\
 	"console=ttyS0,115200\0"					\
+	"mem=128M@0x20000000 mem=128M@0x70000000                        \
 	"mtdparts=atmel_nand:256k(bootstrap)ro,384k(uboot)ro,128k(env),3M(kernel)ro,1M(config),-(rootfs)\0"	\
 	"root=/dev/mtdblock5 rw rootfstype=jffs2\0" 			\
 	"destenv=nand erase " TOSTRING(MT_FLASH_ENV) " " TOSTRING(MT_FLASH_ENV_SIZE) "\0"	\
@@ -210,11 +211,11 @@
           TOSTRING(MT_FLASH_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE_SIZE) "; nand write.jffs2 "		\
           TOSTRING(MT_RAM_SOFTWARE) " " TOSTRING(MT_FLASH_SOFTWARE) " ${filesize}\0"	\
 	"net_boot=run netargs; tftp " TOSTRING(MT_RAM_KERNEL) " ${tftpdir}/${bootfile}; bootm " TOSTRING(MT_RAM_KERNEL) "\0"	\
-	"netargs=sete bootargs console=${console} root=/dev/nfs rw nfsroot=${serverip}:${rootpath},tcp "	\
+	"netargs=sete bootargs ${mem} console=${console} root=/dev/nfs rw nfsroot=${serverip}:${rootpath},tcp "	\
 	  "ip=${ipaddr}:${serverip}:${gatewayip}:${netmask}::eth0:off\0"	\
 	"nand_boot=run nandargs; nand read " TOSTRING(MT_RAM_KERNEL) " " TOSTRING(MT_FLASH_KERNEL) " " TOSTRING(MT_FLASH_KERNEL_SIZE) ";"     \
 	  "bootm " TOSTRING(MT_RAM_KERNEL) "\0"		\
-	"nandargs=sete bootargs console=${console} mtdparts=${mtdparts} root=${root}\0"
+	"nandargs=sete bootargs ${mem} console=${console} mtdparts=${mtdparts} root=${root}\0"
 
 
 #define CONFIG_BAUDRATE			115200
